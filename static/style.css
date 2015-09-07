@@ -1,0 +1,31 @@
+/* Line up sign-in buttons */
+.signinButton {
+	padding-top: 10px;
+}
+/* Style user's photo from fb or google */
+#userpic {
+	height:50px;
+  width:50px;
+  border-radius:50%;
+  overflow:hidden;
+  margin:auto;
+}
+/* Line up user info in nav bar */
+#userInfo {
+	padding-top: 5px;
+}
+/* Style the item picture on the show item template */
+#itemPicture {
+	height:400px;
+  border-radius:5%;
+  overflow:hidden;
+  margin:auto;
+}
+/* Style for media type list items */
+.media-object {
+	height:50px;
+}
+/* Get rid of the the list style on categories */
+.categories {
+	list-style-type: none;
+}

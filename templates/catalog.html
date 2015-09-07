@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+<div class="page-header">
+  <h1>Catalog</h1>
+</div>
+<div class="row clearfix">
+  <div class="col-md-4 column">
+      <h3>
+        Categories
+      </h3>
+      <h4>
+        {% if user %}
+          <a href="{{ url_for('newCategory') }}">Add a new category.</a>
+        {% endif %}
+
+      </h4>
+    <ul class="list-group">
+      {% for i in categories %}
+
+          <li class="list-group-item">
+            <div class="well">
+                <div class="media">
+            		  <div class="media-body">
+                    {% if i.id == category.id %}
+                      <u>
+                    {% endif %}
+              		   <h3 class="media-heading"><a href="{{ url_for('catalog', category_id = i.id) }}">{{ i.name }}</a></h3>
+                    {% if i.id == category.id %}
+                      </u>
+                    {% endif %}
+                  </div>
+                  {% if user.id == i.user_id %}
+                    <span class="pull-right buttons">
+                      <a class="btn btn-sm btn-default" href="{{ url_for('editCategory', category_id = i.id) }}"> Edit</a>
+                      <a class="btn btn-sm btn-primary" href="{{ url_for('deleteCategory', category_id = i.id) }}"> Delete</a>
+                    </span>
+                  {% endif %}
+                </div>
+            </div>
+          </li>
+
+
+
+
+      {% endfor %}
+    </ul>
+  </div>
+  <div class="col-md-8 column">
+
+    {% if user %}
+      <h4><a href="{{ url_for('newItem') }}"><strong>+ Add Item</strong></h4></a>
+    {% endif %}
+    {% if category.id %}
+      <h3>{{ category.name }} Items ({{ items.count() }} items)</h3>
+    {% else %}
+      <h3>Latest Items</h3>
+    {% endif %}
+
+      <ul>
+        {% for i in items %}
+          <li>
+            <div class="well">
+                <div class="media">
+                  {% if i.picture %}
+                    <a class="pull-left" href="#">
+                		    <img class="media-object" src="{{ url_for('static', filename = i.picture) }}">
+              		  </a>
+                  {% endif %}
+            		  <div class="media-body">
+              		    <h4 class="media-heading"><a href="{{ url_for('showItem', category_id = i.category_id, item_id = i.id) }}">{{ i.name }}</a></h4>
+                      {% if not category.id %}
+                        <p class="text-right"><h5>{{ i.category.name }}</h5></p>
+                      {% endif %}
+                  </div>
+                  {% if user.id == i.user_id %}
+                    <span class="pull-right buttons">
+                      <a class="btn btn-sm btn-default" href="{{ url_for('editItem', item_id = i.id) }}"> Edit</a>
+                      <a class="btn btn-sm btn-primary" href="{{ url_for('deleteItem', item_id = i.id) }}"> Delete</a>
+                    </span>
+                  {% endif %}
+                </div>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+
+  </div>
+
+</div>
+
+{% endblock %}

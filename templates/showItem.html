@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+<div class="page-header">
+  <h1>{{ item.name }}</h1>
+</div>
+<div class="row clearfix">
+	<div class="col-md-12 column">
+		<p>{{ item.description }}</p>
+    {% if item.picture %}
+      <img id="itemPicture" alt={{ item.name }} src="{{ url_for('static', filename = item.picture) }}"/>
+    {% endif %}
+
+      {% if user.id == item.user_id %}
+      <span class="pull-right buttons">
+    		<a class="btn btn-sm btn-default" href="{{ url_for('editItem', item_id = item.id) }}">Edit</a>
+        <a class="btn btn-sm btn-primary" href="{{ url_for('deleteItem', item_id = item.id) }}">Delete</a>
+      </span>
+      {% endif %}
+	</div>
+</div>
+{% endblock %}

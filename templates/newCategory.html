@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+<div class="page-header">
+  <h1>New Category</h1>
+</div>
+<div class="row clearfix">
+	<div class="col-md-12 column">
+    <form class="form-horizontal" action = "{{ url_for('newCategory') }}" method = 'post'>
+      <fieldset>
+
+      <!-- Text input-->
+      <div class="control-group">
+        <label class="control-label" for="category">Category</label>
+        <div class="controls">
+          <input id="category" name="category" type="text" placeholder="" class="form-control" required="">
+          <p class="help-block">Category name</p>
+        </div>
+      </div>
+
+      <!-- Button -->
+      <div class="control-group">
+        <div class="controls">
+          <input id="submit" name="submit" type="submit" value="Save" class="btn btn-primary"></button>
+          <a href="{{ url_for('catalog') }}">Cancel</a>
+        </div>
+      </div>
+    </form>
+	</div>
+</div>
+{% endblock %}

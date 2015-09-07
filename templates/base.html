@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+  <head>
+
+    <title>Udacity Catalog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <!-- Google plus login -->
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="https://apis.google.com/js/client:platform.js?onload=start" async defer></script>
+
+  </head>
+  <body>
+
+    <!--FACEBOOK SIGN IN -->
+    <script>
+      window.fbAsyncInit = function() {
+      FB.init({
+        appId      : '610560045753013',
+        cookie     : true,  // enable cookies to allow the server to access
+                            // the session
+        xfbml      : true,  // parse social plugins on this page
+        version    : 'v2.2' // use version 2.2
+      });
+      };
+      // Load the SDK asynchronously
+      (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));
+      // Here we run a very simple test of the Graph API after login is
+      // successful.  See statusChangeCallback() for when this call is made.
+      function sendTokenToServer() {
+        var access_token = FB.getAuthResponse()['accessToken'];
+        $('.signinButton').attr('style', 'display: none');
+        console.log(access_token)
+        console.log('Welcome!  Fetching your information.... ');
+        FB.api('/me', function(response) {
+          console.log('Successful login for: ' + response.name);
+          $.ajax({
+            type: 'POST',
+            url: '/fbconnect?state={{ STATE }}',
+            processData: false,
+            data: access_token,
+            contentType: 'application/octet-stream; charset=utf-8',
+            success: function(result) {
+              // Handle or verify the server response if necessary.
+              if (result) {
+                  window.location.href = "/";
+              } else {
+                $('#result').html('Failed to make a server-side call. Check your configuration and console.');
+              }
+            }
+          });
+        });
+      }
+    </script>
+
+    <!-- Navigation bar -->
+    <div class="navbar navbar-inverse" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">Udacity Catalog</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="/">Home</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right list-inline">
+            {% if not user %}
+            <li>
+              <div class="signinButton">
+                <fb:login-button size="large" scope="public_profile,email" onlogin="sendTokenToServer();">Sign in</fb:login-button>
+              </div>
+            </li>
+            <li>
+              <div class="signinButton">
+                <span class = "g-signin"
+                  data-scope = "openid email"
+                  data-clientid = "29131525031-tq83rdp0b8juf2b0a866b5h92j782qbl.apps.googleusercontent.com"
+                  data-redirecturi = "postmessage"
+                  data-accesstype = "offline"
+                  data-cookiepolicy = "single_host_origin"
+                  data-callback = "signInCallback"
+                  data-approvalprompt = "force" >
+                </span>
+              </div>
+            </li>
+            {% else %}
+            <li>
+              <ul id="userInfo">
+                <li>{{ user.name }}</li>
+                <li><a href="/disconnect">Signout</a></li>
+              </ul>
+            </li>
+            <li>
+              <div id="userPicture">
+                <img src= {{ user.picture }} id="userpic">
+              </div>
+            </li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div id="result"></div>
+
+    <div class="container">
+      <!-- Flask flash message area. -->
+      {% for message in get_flashed_messages() %}
+      <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+      </div>
+      {% endfor %}
+
+      <!-- Code inside child page templates will go here -->
+      {% block page_content %}{% endblock %}
+    </div>
+
+    <!-- Google signin callback code. -->
+    <script type="text/javascript">
+      function signInCallback(authResult) {
+
+        if (authResult['code']) {
+          // Hide the sign-in button now that the user is authorized
+          $('.signinButton').attr('style', 'display: none');
+          // Send the one-time-use code to the server, if the server responds, write a login success message to page.
+          $.ajax({
+            type: 'POST',
+            url: '/gconnect?state={{ STATE }}',
+            processData: false,
+            contentType: 'application/octet-stream; charset=utf-8',
+            data: authResult['code'],
+            success: function(result) {
+              if (result) {
+                  window.location.href = "/";
+              } else if (authResult['error']) {
+                console.log('There was an error: ' + authResult['error']);
+              } else {
+                $('#result').html("Failed to make a server side call. Check your configuration and console.");
+              }
+            }
+          })
+        }
+      }
+    </script>
+
+ </body>
+</html>
