@@ -60,7 +60,7 @@ Permission denied (publickey).
 sudo apt-get update
 sudo apt-get upgrade
 '''
-If 
+If
 '''
 *** System restart required ***
 '''
@@ -110,7 +110,7 @@ sudo nano /etc/apache2/sites-enabled/000-default.conf
 '''
 Insert line
 '''
-WSGIScriptAlias / /var/www/html/myapp.wsgi
+WSGIScriptAlias / /var/www/html/Catalog/project.py
 '''
 
 12. Install and configure PostgreSQL (remote connections are disabled by default)
@@ -121,4 +121,42 @@ sudo apt-get install postgresql
 13. Install Git
 '''
 sudo apt-get install git
+
 '''
+
+14. Clone project source application from git repository
+'''
+cd /var/www/html
+sudo git clone https://github.com/jsonter/Linux-based-Server-Configuration.git
+'''
+
+15. Install PIP and required Python packages
+'''
+sudo apt-get install python-pip
+sudo pip install flask
+sudo pip install httplib2
+sudo pip install sqlalchemy
+sudo pip install requests
+sudo pip install oauth2client
+sudo apt-get install python-psycopg2
+
+16. Create database user
+'''
+sudo -i -u postgres
+createuser --interactive (Catalog)
+'''
+GRANT SELECT, INSERT, DELETE, UPDATE ON ALL TABLES IN SCHEMA public TO catalog;
+
+
+17. Configure app
+'''
+sudo nano /etc/apache2/sites-available/catalog.conf
+sudo a2ensite catalog
+cd /var/www/html/catalog
+sudo nano catalog.wsgi
+
+sudo service apache2 restart
+
+
+
+ssh -i ~/.ssh/udacity_key.rsa grader@52.88.150.147 -p 2200

@@ -51,7 +51,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # Setting for default page behaviour
 NUM_LAST_ITEMS = 5  # The number of items to show if no category is selected.
 
-engine = create_engine('sqlite:///catalog.db')
+engine = create_engine('postgresql://catalog:fgRT56rkG@localhost/catalog')
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
