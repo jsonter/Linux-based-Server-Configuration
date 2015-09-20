@@ -1,6 +1,9 @@
 # Linux-based-Server-Configuration
 Udacity nanodegree project 3. Students will be provided a baseline Ubuntu virtual machine and must prepare that virtual machine to host a web application that has been provided. The virtual machine must be configured to protect against a variety of common attacks and host the web application so that it functions appropriately.
 
+IP Address: http://52.88.150.147/
+SSH: ssh -i ~/.ssh/udacity_key.rsa grader@52.88.150.147 -p 2200
+
 Hints tips and walkthroughs provided by Udacity.com, askubuntu.com, stackoverflow.com Digitalocean.com and code.google.com.
 
 My Steps
@@ -170,4 +173,32 @@ sudo service apache2 restart
 ```
 python /var/www/catalog/catalog/database_setup.py
 python /var/www/catalog/catalog/catalogData.py
+```
+
+* Get Google and Facebook Logins working on remote host.
+Google
+```
+In Google Developers Console for the project:
+Add http://52.88.150.147 to Authorized JavaScript origins.
+Re-download client_secrets.json and then up to server.
+```
+Facebook
+```
+In Facebook Developers Advanced Setting for project:
+Add http://52.88.150.147 to "Valid OAuth redirect URIs"
+```
+
+* Restrict access to .git folder
+```
+cd /var/www/catalog
+sudo nano .htaccess
+RedirectMatch 404 /\.git
+```
+This from http://stackoverflow.com/questions/6142437/make-git-directory-web-inaccessible
+
+* Automatic Ubuntu server package updates
+```
+sudo apt-get install unattended-upgrades
+sudo dpkg-reconfigure --priority=low unattended-upgrades
+(Answer yes to question)
 ```

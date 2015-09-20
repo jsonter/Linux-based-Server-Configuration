@@ -264,6 +264,7 @@ def gdisconnect():
         response.headers['Content-Type'] = 'application/json'
         return response
 
+    return redirect(url_for('catalog'))
 
 @app.route('/disconnect')
 def disconnect():
@@ -627,13 +628,15 @@ def getUserInfo(user_id):
 def createUser(login_session):
     ''' Create a new user in database. '''
     try:
+        if login_session=['username'] = '':
+            login_session=['username'] = login_session['email'][0:login_session['email'].find('@')]
         newUser = User(
             name=login_session['username'], email=login_session['email'],
             picture=login_session['picture'])
 
         session.add(newUser)
         session.commit()
-        return user.id
+        return newUser.id
     except:
         session.rollback()
         flash("Could not store new user!")
