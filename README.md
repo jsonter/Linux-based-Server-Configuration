@@ -1,10 +1,10 @@
 # Linux-based-Server-Configuration
-Udacity nanodegree project 3. Students will be provided a baseline Ubuntu virtual machine and must prepare that virtual machine to host a web application that has been provided. The virtual machine must be configured to protect against a variety of common attacks and host the web application so that it functions appropriately.
+Udacity nanodegree project 5. Students will be provided a baseline Ubuntu virtual machine and must prepare that virtual machine to host a web application that has been provided. The virtual machine must be configured to protect against a variety of common attacks and host the web application so that it functions appropriately.
 
 IP Address: http://52.88.150.147/
 SSH: ssh -i ~/.ssh/udacity_key.rsa grader@52.88.150.147 -p 2200
 
-Hints tips and walkthroughs provided by Udacity.com, askubuntu.com, stackoverflow.com Digitalocean.com and code.google.com.
+Hints tips and walkthroughs provided by Udacity.com, askubuntu.com, stackoverflow.com, Digitalocean.com and code.google.com.
 
 My Steps
 
